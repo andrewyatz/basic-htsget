@@ -1,1 +1,1 @@
-requires 'Mojolicous';
+requires 'Mojolicious';
