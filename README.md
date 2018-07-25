@@ -1,2 +1,39 @@
 # basic-htsget
 Implementation of htsget using Perl and samtools to do the heavy lifting
+
+# Dependencies
+
+- [bcftools](https://github.com/samtools/bcftools) (any version will do but later is better)
+- Perl
+- Mojolicious (use `cpanm --installdeps .` to get this)
+
+# Running
+
+## Locally
+
+```
+./bin/app.pl daemon
+```
+
+Additional help can be got by running
+
+```
+./bin/app.pl
+```
+
+## Under Hypnotoad
+
+```
+APP_PID_FILE=$PWD/app.pid hypnotoad -f $PWD/bin/app.pl
+```
+
+## Config
+
+Config can be set using the `MOJO_CONFIG` environment variable or by writing a JSON config file in the path `basic-htsget.json` in the root directory. See [`basic-htsget.json.example`](https://github.com/andrewyatz/basic-htsget/blob/master/basic-htsget.json.example) for an example of the config.
+
+## Additional ENV options
+
+- `APP_PID_FILE` - set this if you are going to run the server with Hypnotoad to locate the PID file
+- `APP_LOG_LEVEL` - control the application log level of the application
+- `APP_ACCESS_LOG_FILE` - control where the access log is written to (requires [`Mojolicious::Plugins::AccessLog`](https://metacpan.org/pod/Mojolicious::Plugin::AccessLog))
+- `APP_ACCESS_LOG_FORMAT` - control the log format. See the AccessLog plugin for more details. Defaults to `combinedio`
