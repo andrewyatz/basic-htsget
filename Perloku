@@ -1,3 +1,3 @@
 #!/bin/sh
 
-MOJO_CONFIG=$PWD/basic-htsget.json.example PERL5LIB=$PWD/lib:$PERL5LIB ./bin/app.pl daemon --listen http://*:$PORT --mode production
+MOJO_CONFIG=$PWD/basic-htsget.json.heroku PERL5LIB=$PWD/lib:$PERL5LIB ./bin/app.pl daemon --listen http://*:$PORT --mode production
