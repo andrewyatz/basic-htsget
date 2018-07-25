@@ -96,7 +96,7 @@ sub cors {
 sub custom_content_types {
   my ($self) = @_;
   my $types = $self->types();
-  $types->type(json => ["application/${API_VND}+json", 'application/json']);
+  $types->type(json => ["application/${API_VND}+json; charset=utf-8", "application/${API_VND}+json", 'application/json']);
   $types->type(vcf => $VCF_MIME);
   return;
 }
