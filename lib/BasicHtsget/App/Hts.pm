@@ -24,6 +24,10 @@ sub htsget {
 
   # Build response
   my %params = (referenceName => $reference_name, start => ($start+1), end => $end);
+  my %auth;
+  if($self->stash('token')) {
+    $auth{'Authorization'} = 'Bearer '.$self->stash('token');
+  }
   my $resp = {
     htsget => {
       format => "VCF",
@@ -32,6 +36,7 @@ sub htsget {
           "url" => $self->url_for('getvcf', id => $id )->query(%params)->to_abs(),
           headers => {
             'Accept' => $self->vcf_mime(),
+            %auth,
           },
         }
       ]

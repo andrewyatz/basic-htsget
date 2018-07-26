@@ -48,6 +48,29 @@ sub startup {
     $next->();
   });
 
+  $self->hook(before_dispatch => sub {
+    my $c = shift;
+    my $auth = 0;
+    if(my ($token) = ($c->req->headers->authorization || q{}) =~ /^Bearer (.+)$/) {
+      if ($token eq $c->config->{bearer_token}) {
+        $auth = 1;
+        $c->stash('token', $token);
+      }
+      else {
+        $c->raise_error('InvalidAuthentication', 401, 'Authorization provided is invalid');
+      }
+    }
+    $c->stash('auth', $auth);
+  });
+
+  $self->hook(around_action => sub {
+    my ($next, $c, $action, $last) = @_;
+    if($c->authorized($c->param('id'))) {
+      return $next->();
+    }
+    $c->raise_error('PermissionDenied', 403, 'Authorization is required to access the resource');
+  });
+
 	# Route commands through the application
 	my $r = $self->routes;
 
@@ -104,6 +127,14 @@ sub custom_content_types {
 sub install_helpers {
   my ($self) = @_;
 
+  $self->helper( "authorized" => sub {
+    my ($c, $id) = @_;
+    my $lookup = $c->config->{lookup};
+    return 1 if $lookup->{$id}->{public}; # if it's public short cut
+    return 1 if $c->stash('auth'); #if we were authorized then allow it
+    return 0; #if not then bail
+  });
+
   $self->helper( "has_id" => sub {
     my ($c, $id) = @_;
     return exists $c->config->{lookup}->{$id} ? 1 : 0;
@@ -111,7 +142,7 @@ sub install_helpers {
 
   $self->helper( "get_path" => sub {
     my ($c, $id) = @_;
-    return $c->config->{lookup}->{$id};
+    return $c->config->{lookup}->{$id}->{path};
   });
 
   $self->helper( "raise_error" => sub {

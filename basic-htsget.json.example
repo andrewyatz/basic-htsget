@@ -1,6 +1,10 @@
 {
   "bcftools" : "bcftools",
+  "bearer_token" : "ABCDEFG",
   "lookup": {
-    "scer": "http://ftp.ensembl.org/pub/current_variation/vcf/saccharomyces_cerevisiae/saccharomyces_cerevisiae.vcf.gz"
+    "scer": {
+      "path" : "http://ftp.ensembl.org/pub/current_variation/vcf/saccharomyces_cerevisiae/saccharomyces_cerevisiae.vcf.gz",
+      "public" : false
+    }
   }
 }

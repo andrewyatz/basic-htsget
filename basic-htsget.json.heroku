@@ -1,6 +1,14 @@
 {
   "bcftools" : "bcftools",
+  "bearer_token" : "ACTG",
   "lookup": {
-    "scer": "http://ftp.ensembl.org/pub/current_variation/vcf/saccharomyces_cerevisiae/saccharomyces_cerevisiae.vcf.gz"
+    "scer": {
+      "path" : "http://ftp.ensembl.org/pub/current_variation/vcf/saccharomyces_cerevisiae/saccharomyces_cerevisiae.vcf.gz",
+      "public" : true
+    },
+    "1kg" : {
+      "path" : "http://ftp.ensembl.org/pub/current_variation/vcf/homo_sapiens/1000GENOMES-phase_3.vcf.gz",
+      "public" : false
+    }
   }
 }
