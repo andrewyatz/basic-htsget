@@ -37,3 +37,22 @@ Config can be set using the `MOJO_CONFIG` environment variable or by writing a J
 - `APP_LOG_LEVEL` - control the application log level of the application
 - `APP_ACCESS_LOG_FILE` - control where the access log is written to (requires [`Mojolicious::Plugins::AccessLog`](https://metacpan.org/pod/Mojolicious::Plugin::AccessLog))
 - `APP_ACCESS_LOG_FORMAT` - control the log format. See the AccessLog plugin for more details. Defaults to `combinedio`
+
+# Authorisation
+
+The server has a very dumb authorisation scheme. The token is hard-coded into the config file and is matched against the content of the `Authorization: Bearer XXXXX` HTTP request header. To get bcftools to provide the token you must do the following:
+
+```bash
+$ echo -n 'my secret token' > token
+$ HTS_AUTH_LOCATION=$PWD/token bcftools view 'https://server/variants/id?referenceName=chr1&start=1&end=100'
+```
+
+If you are accessing the server over HTTP then you must set the following environment variable
+
+```bash
+HTS_ALLOW_UNENCRYPTED_AUTHORIZATION_HEADER="I understand the risks"
+```
+
+## Controlling access
+
+Each VCF file given in the config file can be set to `"public": true` or `"public": false`. If set to false then you must be authorised with the correct token. No other level of access granularity has been given.
