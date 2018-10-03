@@ -23,12 +23,12 @@ sub htsget {
   }
   if($start) {
     $self->validate_coords($start, $end);
-    $params{start => ($start+1)};
-    $params{end => $end};
+    $params{start} => ($start+1);
+    $params{end} = $end;
   }
   if($reference_name) {
     $self->_check_reference_name($id, $reference_name);
-    $params{referenceName => $reference_name};
+    $params{referenceName} = $reference_name;
   }
 
   # Build response
