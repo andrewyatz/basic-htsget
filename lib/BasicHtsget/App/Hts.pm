@@ -52,11 +52,19 @@ sub getvcf {
 	my $reference_name = $self->param('referenceName');
 	my $start = $self->param('start');
 	my $end = $self->param('end');
-	my $range = sprintf('%s:%d-%d', $reference_name, $start, $end);
+  my $range = q{};
+  if($id) {
+    if($start) {
+      $range = sprintf('%s:%d-%d', $reference_name, $start, $end);
+    }
+    else {
+      $range = $reference_name;
+    }
+  }
 	my $location = $self->get_path($id);
 	$self->res->headers->content_type($self->vcf_mime());
   my $bin = $self->bcftools_bin();
-	open my $fh, "${bin} view --output-type v --regions ${range} ${location}|"  or die "Cannot execute ${bin}";
+	open my $fh, "${bin} view --output-type v ${range} ${location}|"  or die "Cannot execute ${bin}";
 	my $drain;
 	$drain = sub {
 		my $c = shift;
