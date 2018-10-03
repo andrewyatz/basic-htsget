@@ -10,20 +10,28 @@ sub htsget {
   my $end = $self->param('end');
   my $format = $self->param('format');
 
-  if(! $reference_name) {
-    return $self->raise_error('InvalidInput', 400, 'This server requires you to specify a referenceName');
-  }
+  # if(! $reference_name) {
+  #   return $self->raise_error('InvalidInput', 400, 'This server requires you to specify a referenceName');
+  # }
+
+  my %params;
   if(!$self->has_id($id)) {
     return $self->raise_error('NotFound', 404, 'Identifier is unknown');
   }
   if($format && $format != 'VCF') {
     return $self->raise_error('UnsupportedFormat', 400, 'Unsupported format. Only "VCF" is understood');
   }
-  $self->validate_coords($start, $end);
-  $self->_check_reference_name($id, $reference_name);
+  if($start) {
+    $self->validate_coords($start, $end);
+    $params{start => ($start+1)};
+    $params{end => $end};
+  }
+  if($reference_name) {
+    $self->_check_reference_name($id, $reference_name);
+    $params{referenceName => $reference_name};
+  }
 
   # Build response
-  my %params = (referenceName => $reference_name, start => ($start+1), end => $end);
   my %auth;
   if($self->stash('token')) {
     $auth{'Authorization'} = 'Bearer '.$self->stash('token');
