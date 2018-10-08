@@ -17,15 +17,23 @@ sub htsget {
   if($format && $format != 'VCF') {
     return $self->raise_error('UnsupportedFormat', 400, 'Unsupported format. Only "VCF" is understood');
   }
-  if(defined $start) {
-    $self->validate_coords($start, $end);
-    $params{start} = ($start+1);
-    $params{end} = $end;
-  }
+
   if(defined $reference_name) {
     if($self->_check_reference_name($id, $reference_name)) {
       $params{referenceName} = $reference_name;
     }
+    else {
+      return $self->raise_error('InvalidRange', 400, 'Given referenceName '.$reference_name.' cannot be found');
+    }
+  }
+
+  if(defined $start) {
+    if(!defined $reference_name) {
+      return $self->raise_error('InvalidInput', 400, 'Start has been specified but referenceName has not been given');
+    }
+    $self->validate_coords($start, $end);
+    $params{start} = ($start+1);
+    $params{end} = $end;
   }
 
   # Build response
