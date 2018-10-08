@@ -74,6 +74,12 @@ sub startup {
 	# Route commands through the application
 	my $r = $self->routes;
 
+  # Default routes
+  $r->get($_ => sub {
+    my $c = shift;
+    $c->render(template => 'index');
+  }) for qw|/ /index|;
+
 	# Things that go to a controller
   $r->get('/variants/:id')->to(controller => 'hts', action => 'htsget');
   $r->get('/variants/:id/vcf')->to(controller => 'hts', action => 'getvcf')->name('getvcf');

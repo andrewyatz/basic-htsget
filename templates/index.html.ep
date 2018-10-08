@@ -1,0 +1,17 @@
+% layout 'default', title => 'htsget example - example htsget for VCF';
+<h1>htsget</h1>
+<h2>The Specification</h2>
+<p>
+See <a href=''>the htsget specification</a> for more information. This service provides an implementation based upon the VCF format.
+</p>
+<h2>Public URLs to get you started (all use <a href='http://ftp.ensembl.org/pub/current_variation/vcf/saccharomyces_cerevisiae/saccharomyces_cerevisiae.vcf.gz'>Ensembl's s.cer VCF file</a>)</h2>
+<p>
+<dl>
+<dt>Example range query</dt>
+<dd><a href='/variants/scer?referenceName=I&start=0&end=10'><code>/variants/scer?referenceName=I&start=0&end=10</code></a></dd>
+<dt>Example reference name query</dt>
+<dd><a href='/variants/scer?referenceName=I'><code>/variants/scer?referenceName=I</code></a></dd>
+<dt>Return all data</dt>
+<dd><a href='/variants/scer'><code>/variants/scer</code></a></dd>
+</dl>
+</p>
