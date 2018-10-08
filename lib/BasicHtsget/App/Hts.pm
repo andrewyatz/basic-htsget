@@ -76,8 +76,8 @@ sub getvcf {
 	my $location = $self->get_path($id);
 	$self->res->headers->content_type($self->vcf_mime());
   my $bin = $self->bcftools_bin();
-  my $cmd = "${bin} view --output-type v ${range} ${location}|";
-	open my $fh, $cmd  or die "Cannot execute ${bin}";
+  my $command = "${bin} view --output-type v ${range} ${location}|";
+	open my $fh, $command or die "Cannot execute ${bin}: $!";
 	my $drain;
 	$drain = sub {
 		my $c = shift;
@@ -107,7 +107,8 @@ sub _reference_name_lookup {
   my ($self, $id) = @_;
   my $location = $self->get_path($id);
   my $bin = $self->bcftools_bin();
-  open my $fh, "${bin} index --stats ${location}|"  or die "Cannot execute ${bin}";
+  my $command = "${bin} index --stats ${location}|";
+  open my $fh, $command  or die "Cannot execute ${bin}: $!";
   my %lookup;
   while(my $line = <$fh>) {
     my ($reference_name) = split(/\s+/, $line);

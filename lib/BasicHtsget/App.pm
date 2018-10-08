@@ -74,11 +74,13 @@ sub startup {
 	# Route commands through the application
 	my $r = $self->routes;
 
-  # Default routes
-  $r->get($_ => sub {
+  my $cb = sub {
     my $c = shift;
-    $c->render(template => 'index', skip_auth => 1);
-  }) for qw|/ /index|;
+    $c->render(template => 'index');
+  };
+  $r->get('/')->to(cb => $cb, auth => 1);
+  $r->get('/index')->to(cb => $cb, auth => 1);
+  $r->get('/ping')->to(controller => 'service', action => 'ping', auth => 1);
 
 	# Things that go to a controller
   $r->get('/variants/:id')->to(controller => 'hts', action => 'htsget');
@@ -135,10 +137,11 @@ sub install_helpers {
 
   $self->helper( "authorized" => sub {
     my ($c, $id) = @_;
-    my $lookup = $c->config->{lookup};
-    return 1 if $lookup->{$id}->{public}; # if it's public short cut
+    if(defined $id) {
+      my $lookup = $c->config->{lookup};
+      return 1 if $lookup->{$id}->{public}; # if it's public short cut
+    }
     return 1 if $c->stash('auth'); #if we were authorized then allow it
-    return 1 if $c->stash('skip_auth'); #if we were told the route can skip it then skip it
     return 0; #if not then bail
   });
 
