@@ -1,0 +1,14 @@
+{
+  "bcftools": "bcftools",
+  "bearer_token": "testtoken",
+  "lookup": {
+    "local_scer": {
+      "path": "t/data/mini.vcf.gz",
+      "public": true
+    },
+    "mini": {
+      "path": "t/data/mini.vcf.gz",
+      "public": true
+    }
+  }
+}
