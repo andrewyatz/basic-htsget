@@ -77,7 +77,7 @@ sub startup {
   # Default routes
   $r->get($_ => sub {
     my $c = shift;
-    $c->render(template => 'index');
+    $c->render(template => 'index', skip_auth => 1);
   }) for qw|/ /index|;
 
 	# Things that go to a controller
@@ -138,6 +138,7 @@ sub install_helpers {
     my $lookup = $c->config->{lookup};
     return 1 if $lookup->{$id}->{public}; # if it's public short cut
     return 1 if $c->stash('auth'); #if we were authorized then allow it
+    return 1 if $c->stash('skip_auth'); #if we were told the route can skip it then skip it
     return 0; #if not then bail
   });
 
