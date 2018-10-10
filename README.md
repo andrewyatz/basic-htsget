@@ -56,3 +56,27 @@ HTS_ALLOW_UNENCRYPTED_AUTHORIZATION_HEADER="I understand the risks"
 ## Controlling access
 
 Each VCF file given in the config file can be set to `"public": true` or `"public": false`. If set to false then you must be authorised with the correct token. No other level of access granularity has been given.
+
+# Releasing to Heroku
+
+We have developed a docker image, which can be released to Heroku for testing. This assumes you already have a project to push these assets to in Heroku. For more information see the [Heroku container documentation](https://devcenter.heroku.com/articles/container-registry-and-runtime).
+
+```bash
+# Login to heroku
+$ heroku login
+
+# Login to the container registry
+$ heroku container:login
+
+# Build the image and ignore any local caches (ensure you do rebuild the image)
+$ docker build --no-cache
+
+# Push the container
+$ heroku container:push web
+
+# Release the container
+$ heroku container:release web
+
+# Open in a browser
+$ heroku open
+```
